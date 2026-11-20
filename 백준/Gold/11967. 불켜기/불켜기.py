@@ -1,4 +1,4 @@
-# 불켜기 (시간 내 x)
+# 불켜기
 # 19:07 ~ 19:23 구상 16분
 # 일단 bfs로 하는데... 자신이없네
 # 1. 공복 : 100x100x100 (상태 bit-> list로 저장 후 모든 node 방문한다 쳐)
@@ -16,9 +16,7 @@
 # 방문 가능한 set에
 # 20:09 2차 제출 : 와 1개 틀림 wtf 길어서 복붙도 못함
 
-
-# 11:10 ~ 11:15 디버깅
-from collections import deque
+#from collections import deque
 from collections import defaultdict
 import sys
 sys.setrecursionlimit(10000)
@@ -37,19 +35,16 @@ light = [[False]*N for _ in range(N)]
 poss = set()
 visited = set([(0,0)])
 light[0][0] = True
-q = deque()
-q.append((0,0))
 
-while q:
-    cr, cc = q.popleft()
+def solve(cr, cc):
 
     for dr, dc in drdc:
         nr, nc = cr + dr, cc + dc
         if not inrange(nr,nc): continue # 할필요 없긴 한데 set 터질까바
         poss.add((nr, nc)) # 방문 가능한
-        if light[nr][nc] == True and (nr,nc) not in visited:
-            q.append((nr,nc))
+        if light[nr][nc] == True and (nr, nc) not in visited:
             visited.add((nr,nc))
+            solve(nr,nc)
 
     for nr, nc in adj[(cr, cc)]:
         light[nr][nc] = True
@@ -58,7 +53,9 @@ while q:
 
         if (nr,nc) in poss:
             visited.add((nr,nc))
-            q.append((nr,nc))
+            solve(nr, nc)
 
 
+
+solve(0,0)
 print(sum(sum(row) for row in light))
