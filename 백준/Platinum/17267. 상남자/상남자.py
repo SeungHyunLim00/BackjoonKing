@@ -35,12 +35,14 @@ visited[sr][sc] = (0,0)
 
 drdc = [ (-1,0), (1,0)]
 
+
+
 comp = lambda r, c : sum(visited[r][c])
 
 while q:
     cr, cc = q.popleft()
-    #print(f"cr, cc {cr, cc} with {visited[cr][cc]}")
     usedl, usedr = visited[cr][cc]
+    #print(f"cr, cc {cr, cc} with {usedl, usedr}")
     # 왼쪽:
     if usedl != L:
         nr, nc = cr, cc - 1
@@ -58,16 +60,13 @@ while q:
                 visited[nr][nc] = (usedl, usedr+1)
 
     for dr in (-1, 1):
-        tr = cr
-        while True:
-            nr = tr + dr
-            if not (0<=nr<N) or matrix[nr][cc] == "1": break
-            else:
-                tr = nr
-                if not visited[nr][cc] or visited[nr][cc] > visited[cr][cc]:
-                    q.append((nr,cc))
-                    visited[nr][cc] = (usedl, usedr)
+        nr, nc = cr + dr, cc
+        if not (0<=nr<N and 0<=nc<M): continue
+        if matrix[nr][nc] == "1": continue
 
+        if not visited[nr][nc] or comp(nr, nc) > comp(cr, cc) :
+            q.append((nr,nc))
+            visited[nr][nc] = (usedl, usedr)
 
 # for r, row in enumerate(visited):
 #     for c, val in enumerate(row):
