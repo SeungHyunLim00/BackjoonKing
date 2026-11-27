@@ -35,27 +35,25 @@ visited[sr][sc] = (0,0)
 
 drdc = [ (-1,0), (1,0)]
 
-
-
 comp = lambda r, c : sum(visited[r][c])
 
 while q:
     cr, cc = q.popleft()
     usedl, usedr = visited[cr][cc]
-    #print(f"cr, cc {cr, cc} with {usedl, usedr}")
+    
     # 왼쪽:
     if usedl != L:
         nr, nc = cr, cc - 1
         if (0 <= nr < N and 0 <= nc < M) and\
             matrix[nr][nc] != "1":
-            if not visited[nr][nc] or comp(nr,nc) > comp(cr, cc) + 1:
+            if not visited[nr][nc] or visited[nr][nc] > visited[cr][cc]:
                 q.append((nr,nc))
                 visited[nr][nc] = (usedl + 1, usedr)
     if usedr != R:
         nr, nc = cr, cc + 1
         if (0 <= nr < N and 0 <= nc < M) and \
                 matrix[nr][nc] != "1":
-            if not visited[nr][nc] or comp(nr, nc) > comp(cr, cc) + 1:
+            if not visited[nr][nc] or visited[nr][nc] > visited[cr][cc]:
                 q.append((nr,nc))
                 visited[nr][nc] = (usedl, usedr+1)
 
@@ -64,7 +62,7 @@ while q:
         if not (0<=nr<N and 0<=nc<M): continue
         if matrix[nr][nc] == "1": continue
 
-        if not visited[nr][nc] or comp(nr, nc) > comp(cr, cc) :
+        if not visited[nr][nc] or  visited[nr][nc] > visited[cr][cc] :
             q.append((nr,nc))
             visited[nr][nc] = (usedl, usedr)
 
